@@ -17,13 +17,14 @@ hbs.registerHelper('screamIt',(text)=>{
 	return text.toUpperCase();
 });
 
+app.use(express.static(__dirname + '/public'));
 
 app.set('view engine', 'hbs');                  //configurations for express
 hbs.registerPartials(__dirname + '/views/partials'); 
 
-// app.use((req,res,next)=>{
-// 		res.render('maintenance.hbs');
-// });
+ app.use((req,res,next)=>{
+ 		res.render('comingsoon.hbs');
+ });
 
 app.use((req,res,next)=>{
 	var now = new Date().toString();
@@ -37,7 +38,6 @@ app.use((req,res,next)=>{
 	next();
 });       //middleware
 
-app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req,res) => {
 	//req headers what was requested
@@ -47,6 +47,12 @@ app.get('/', (req,res) => {
 		pageTitle: 'Home Page',
 		welcome: 'Welcome to my page!',
 	})
+});
+
+app.get('/comingsoon.hbs',(req,res) =>{
+	res.render('comingsoon.hbs',{
+		pageTitle: 'Coming Soon',
+	});
 });
 
 app.get('/about', (req,res) =>{
