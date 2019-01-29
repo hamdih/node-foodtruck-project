@@ -22,7 +22,7 @@ app.use(express.static(__dirname + '/public'));
 app.set('view engine', 'hbs');                  //configurations for express
 hbs.registerPartials(__dirname + '/views/partials'); 
 
- app.use((req,res,next)=>{
+ app.get('/comingsoon',(req,res)=>{
  		res.render('comingsoon.hbs');
  });
 
@@ -43,17 +43,9 @@ app.get('/', (req,res) => {
 	//req headers what was requested
 	//res - can decide what is sent back, status codes
 	// res.send('<h2>Hello Express</h2>');
-	res.render('home.hbs', {
-		pageTitle: 'Home Page',
-		welcome: 'Welcome to my page!',
-	})
+	res.sendFile('views/signup.html', {root:__dirname});
 });
 
-app.get('/comingsoon.hbs',(req,res) =>{
-	res.render('comingsoon.hbs',{
-		pageTitle: 'Coming Soon',
-	});
-});
 
 app.get('/about', (req,res) =>{
 	res.render('about.hbs', {
