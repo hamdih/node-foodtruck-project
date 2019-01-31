@@ -1,13 +1,36 @@
 const express = require('express');
 const hbs = require('hbs');
 const fs = require('fs');
+const bodyParser = require('body-parser');
+
+var{mongoose} = require('./server/db/mongoose');
+var {foodTruck} = require('./server/models/foodTrucks');
+var {User} = require('./server/models/user');
+//when importing models
+
 const port = process.env.PORT || 3000;
 var app = express();
 //middle ware how your express application works, third party on, customization
 //__dirname path to root of project
-
+app.use(bodyParser.json());//bodyparse to parse body of json data
 
 //partial helper is a function that can be ran from template
+
+//how to send json to our express application using postman for req and res
+ app.post('/users',(req,res) => {
+ 	var newUser = new User({
+ 		firstName: req.body.firstName,
+ 		lastName: req.body.lastName,
+ 		foodPreference: req.body.foodPreference
+ 	});
+ 	newUser.save().then((result) =>{
+		
+		res.status(200).send(result);
+ 		},(e)=>{
+		res.status(400).send(e);
+		
+ 	});
+});
 
 hbs.registerHelper('getCurrentYear',() => {
 	return new Date().getFullYear();
