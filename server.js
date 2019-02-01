@@ -17,11 +17,13 @@ app.use(bodyParser.json());//bodyparse to parse body of json data
 //partial helper is a function that can be ran from template
 
 //how to send json to our express application using postman for req and res
+ //Create a user
  app.post('/users',(req,res) => {
  	var newUser = new User({
  		firstName: req.body.firstName,
  		lastName: req.body.lastName,
- 		foodPreference: req.body.foodPreference
+ 		foodPreference: req.body.foodPreference,
+ 		favFoodTrucks: req.body.favFoodTrucks
  	});
  	newUser.save().then((result) =>{
 		
@@ -31,6 +33,55 @@ app.use(bodyParser.json());//bodyparse to parse body of json data
 		
  	});
 });
+//Create a food truck
+app.post('/foodTrucks',(req,res) => {
+ 	var newfoodTruck = new foodTruck({
+ 		name: req.body.name,
+ 		location: req.body.location,
+ 		typeOfFood: req.body.typeOfFood,
+ 		rank: req.body.rank,
+
+ 	});
+ 	newfoodTruck.save().then((result) =>{
+		
+		res.status(200).send(result);
+ 		},(e)=>{
+		res.status(400).send(e);
+		
+ 	});
+});
+
+/*************************User Functions********/
+//get all users
+
+//get all user's favorite food trucks
+
+//add favorite food truck to user = add user to food truck
+
+//delete food truck of user = delete user from food truck
+
+/*************************Food Truck Functions********/
+//get all food trucks
+
+//get food trucks based on search bar
+
+//get food trucks based on foodType
+
+//get food trucks based on nearest/location
+
+/*************************Randomize feature Functions********/
+//Get random food truck based on users favorites
+
+//get random food truck based on foodType
+
+//get random food truck based on lunch,breakfast,dinner, etc
+
+
+
+
+
+
+
 
 hbs.registerHelper('getCurrentYear',() => {
 	return new Date().getFullYear();

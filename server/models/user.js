@@ -42,20 +42,22 @@ var User = mongoose.model('users', { //"users" collection in DB from up town bei
 
 
 			//need to fill, will be an array, connected to food trucks foodCategories
-		}]
-	// favFoodTrucks: [{
-	// 	foodTruckName:{	
-	// 		type: String,
-	// 		required: true
-	// 	}
-	// 	foodType: {	//should have a foreign key to connect to foodTruck model
-	// 		type: String,
-	// 		trim: true,
-	// 		required: true
-	// 	}
-	// 	//will be an array of food trucks
+		}],
+	favFoodTrucks: [//{
+			//type: Object
+		// foodTruckName:{	
+		// 	type: String,
+		// 	required: true
+		// }
+		// foodType: {	//should have a foreign key to connect to foodTruck model
+		// 	type: String,
+		// 	trim: true,
+		// 	required: true
+		// }
+		//will be an array of food trucks
 
-	// }]
+	//}
+	]
 
 });
 
