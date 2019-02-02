@@ -43,6 +43,7 @@ var User = mongoose.model('users', { //"users" collection in DB from up town bei
 
 			//need to fill, will be an array, connected to food trucks foodCategories
 		}],
+
 	favFoodTrucks: [//{
 			//type: Object
 		// foodTruckName:{	
@@ -57,7 +58,24 @@ var User = mongoose.model('users', { //"users" collection in DB from up town bei
 		//will be an array of food trucks
 
 	//}
-	]
+	],
+	userFriends: [{
+		type: String
+	}],
+	coordinates:{
+		latitude:{
+			type: Number,
+			required: true
+		},
+		longitude:{
+			type:Number,
+			required: true
+		}
+	},
+	distance: {
+		type: Number,
+		required: true
+	}
 
 });
 

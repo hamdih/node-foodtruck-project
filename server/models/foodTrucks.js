@@ -7,11 +7,51 @@ var foodTruck = mongoose.model('foodTrucks', { //"foodTrucks" collection in DB f
 		type: String,
 		minLength: 1
 	},
-	location:{
-		// required: true,
-		trim: true,
-		type: String,
-		minLength: 1
+	price:{},
+	location:[
+		address1:{
+			type:String,
+			required: true
+		},
+		address2:{
+			type:String,
+			required: false
+		}
+		address3:{
+			type:String,
+			required: false
+		}
+		city:{
+			type:String,
+			required: true
+		}
+		zip_code:{
+			type:String,
+			required: true
+		}
+		country:{
+			type:String,
+			required: true
+		}
+		state:{
+			type:String,
+			required: true
+		}
+		display_address:{
+			type:String,
+			required: true
+		}
+
+	],
+	coordinates:{
+		latitude:{
+			type: Number,
+			required: true
+		},
+		longitude:{
+			type:Number,
+			required: true
+		}
 	},
 	website:{
 		// required: true,
@@ -29,6 +69,10 @@ var foodTruck = mongoose.model('foodTrucks', { //"foodTrucks" collection in DB f
 		trim: true,
 		type: String,
 		minLength: 1
+	},
+	distance: {
+		type: Number,
+		required: true
 	},
 	typeOfFood:[{
 			foodType: {		//Choose from drop down menu, diet should be its own model as lookup
