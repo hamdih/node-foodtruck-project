@@ -2,6 +2,7 @@ const express = require('express');
 const hbs = require('hbs');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const foodtruckapi = require('./API/foodtruckapi/foodtruckapi.js');
 
 var{mongoose} = require('./server/db/mongoose');
 var {foodTruck} = require('./server/models/foodTrucks');
@@ -77,8 +78,23 @@ app.post('/foodTrucks',(req,res) => {
 //get random food truck based on lunch,breakfast,dinner, etc
 
 
+app.post('/addFoodTrucks/:offset',(req,res) =>{
+	var offset = req.params.offset;	
+	foodtruckapi.foodtruckapi(offset,(errormessage,results)=>{
+			if(errormessage){
+					res.status(400).send();
+			}else{
+				foodTruck.insertMany(results,(error, docs)=> {
+					if(error){
+						return console.log(error);
+					}
+					res.status(200).send(docs);
+				});
+				
 
-
+			}
+	})
+})
 
 
 
