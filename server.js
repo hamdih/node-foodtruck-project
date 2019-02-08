@@ -3,10 +3,15 @@ const hbs = require('hbs');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const foodtruckapi = require('./API/foodtruckapi/foodtruckapi.js');
+const bcrypt = require('bcryptjs');
+const _ = require('lodash');
 
 var{mongoose} = require('./server/db/mongoose');
 var {foodTruck} = require('./server/models/foodTrucks');
 var {User} = require('./server/models/user');
+var {authenticate} = require('./server/middleware/authenticate');
+const {ObjectID} = require('mongodb');
+
 //when importing models
 
 const port = process.env.PORT || 3000;
@@ -19,21 +24,42 @@ app.use(bodyParser.json());//bodyparse to parse body of json data
 
 //how to send json to our express application using postman for req and res
  //Create a user
- app.post('/users',(req,res) => {
- 	var newUser = new User({
- 		firstName: req.body.firstName,
- 		lastName: req.body.lastName,
- 		foodPreference: req.body.foodPreference,
- 		favFoodTrucks: req.body.favFoodTrucks
- 	});
- 	newUser.save().then((result) =>{
-		
-		res.status(200).send(result);
- 		},(e)=>{
-		res.status(400).send(e);
-		
- 	});
+ app.get('/users/me', authenticate, (req,res)=>{
+		res.send(req.user);
 });
+app.post('/users',(req,res) =>{	//creating a new user
+	var body = _.pick(req.body,['email', 'password']);
+	var user = new User(body);
+
+	//model instance and instance method
+	//newUser.generateAuthToken//User.findByToken
+
+
+	user.save().then(()=>{
+		return user.generateAuthToken();
+	}).then((token) =>{
+		res.header('x-auth',token).send(user); //x- means it is custom
+	},(e)=>{
+		res.status(400).send(e);
+	});
+
+
+
+
+});
+
+app.post('/users/login', (req,res) =>{ //login for a user
+		var body = _.pick(req.body, ['email', 'password']);
+
+		User.findByCredentials(body.email,body.password).then((user)=>{
+			return user.generateAuthToken().then((token)=>{ //any errors will go to the catch(e)
+			res.header('x-auth',token).send(user); //x- means it is custom
+			});
+			res.send(user);
+		}).catch((e)=>{			//catch(e) will catch promises that are rejected
+			res.status(400).send();
+		})
+	})	
 //Create a food truck
 app.post('/foodTrucks',(req,res) => {
  	var newfoodTruck = new foodTruck({
