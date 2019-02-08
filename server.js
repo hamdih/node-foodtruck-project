@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const foodtruckapi = require('./API/foodtruckapi/foodtruckapi.js');
 const bcrypt = require('bcryptjs');
 const _ = require('lodash');
+require('./server/config/config');
+
 
 var{mongoose} = require('./server/db/mongoose');
 var {foodTruck} = require('./server/models/foodTrucks');
@@ -14,7 +16,7 @@ const {ObjectID} = require('mongodb');
 
 //when importing models
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 var app = express();
 //middle ware how your express application works, third party on, customization
 //__dirname path to root of project
@@ -186,3 +188,4 @@ app.listen(port, () =>{
 	console.log(`Server is up on port ${port}`);
 
 });											//bind to a port
+module.exports = {app};
