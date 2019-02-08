@@ -36,7 +36,7 @@ var UserSchema = new mongoose.Schema ({
 		//required: true,
 		trim: true,
 		type: String,
-		minLength: 6
+		minlength: 6
 	},
 	tokens:[{
 		access:{
