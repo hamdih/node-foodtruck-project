@@ -7,7 +7,6 @@ const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 require('./server/config/config');
 
-
 var{mongoose} = require('./server/db/mongoose');
 var {foodTruck} = require('./server/models/foodTrucks');
 var {User} = require('./server/models/user');
@@ -15,12 +14,13 @@ var {authenticate} = require('./server/middleware/authenticate');
 const {ObjectID} = require('mongodb');
 
 //when importing models
-
 const port = process.env.PORT;
 var app = express();
 //middle ware how your express application works, third party on, customization
 //__dirname path to root of project
 app.use(bodyParser.json());//bodyparse to parse body of json data
+app.use(express.urlencoded());
+app.use(express.static(__dirname + '/views'));
 
 //partial helper is a function that can be ran from template
 
@@ -29,23 +29,37 @@ app.use(bodyParser.json());//bodyparse to parse body of json data
  app.get('/users/me', authenticate, (req,res)=>{
 		res.send(req.user);
 });
-app.post('/users',(req,res) =>{	//creating a new user
-	var body = _.pick(req.body,['email', 'password']);
-	var user = new User(body);
-
-	//model instance and instance method
+app.post('/sign_up',(req,res) =>{	//creating a new user
+	var body = _.pick(req.body,['email', 'password','fname', 'lname']);
+	var data = {
+		email: body.email,
+		password: body.password,
+		firstName: body.fname,
+		lastName: body.lname,
+		fullName : body.fname + ' ' + body.lname
+	}
+	console.log(data);
+	var user = new User(data);
+	console.log("DATA is " + JSON.stringify(user) );
+		//model instance and instance method
 	//newUser.generateAuthToken//User.findByToken
 
 
 	user.save().then(()=>{
 		return user.generateAuthToken();
 	}).then((token) =>{
-		res.header('x-auth',token).send(user); //x- means it is custom
+		res.header('x-auth',token).set({//x- means it is custom
+		'Access-Control-Allow-Origin' : '*'
+	});
+
+		return res.sendFile('/views/success.html', {root:__dirname});   
 	},(e)=>{
 		res.status(400).send(e);
 	});
 
 
+	res
+	
 
 
 });
@@ -163,7 +177,6 @@ app.get('/', (req,res) => {
 	// res.send('<h2>Hello Express</h2>');
 	res.sendFile('views/signup.html', {root:__dirname});
 });
-
 
 app.get('/about', (req,res) =>{
 	res.render('about.hbs', {
