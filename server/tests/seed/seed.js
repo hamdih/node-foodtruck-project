@@ -8,14 +8,25 @@ const {User} = require('./../../models/user');
 const userOneId = new ObjectID();
 const userTwoId = new ObjectID();
 
+// var data = {
+// 		email: body.email,
+// 		password: body.password,
+// 		firstName: body.fname,
+// 		lastName: body.lname,
+// 		fullName : body.fname + ' ' + body.lname
+// 	}
+
 const users = [{
 	_id: userOneId,
 	email: "hamdi@example.com",
 	password :'useronepass',
 	tokens: [{
 		access :'auth',
-		token: jwt.sign({_id:userOneId,access: 'auth'}, 'abc123').toString()
-	}]
+		token: jwt.sign({_id:userOneId,access: 'auth'},  process.env.JWT_SECRET).toString()
+	}],
+	firstName: "Hamdi" ,
+	lastName: "Hmimy",
+	fullName: "Hamdi Hmimy"
 	},
 	{
 	_id: userTwoId,

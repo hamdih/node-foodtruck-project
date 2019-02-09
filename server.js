@@ -30,17 +30,17 @@ app.use(express.static(__dirname + '/views'));
 		res.send(req.user);
 });
 app.post('/sign_up',(req,res) =>{	//creating a new user
-	var body = _.pick(req.body,['email', 'password','fname', 'lname']);
+	var body = _.pick(req.body,['email', 'password','firstName', 'lastName']);
 	var data = {
 		email: body.email,
 		password: body.password,
-		firstName: body.fname,
-		lastName: body.lname,
-		fullName : body.fname + ' ' + body.lname
+		firstName: body.firstName,
+		lastName: body.lastName,
+		fullName : body.firstName + ' ' + body.lastName
 	}
-	console.log(data);
+	// console.log(data);
 	var user = new User(data);
-	console.log("DATA is " + JSON.stringify(user) );
+	// console.log("DATA is " + JSON.stringify(user) );
 		//model instance and instance method
 	//newUser.generateAuthToken//User.findByToken
 
@@ -58,8 +58,6 @@ app.post('/sign_up',(req,res) =>{	//creating a new user
 	});
 
 
-	res
-	
 
 
 });

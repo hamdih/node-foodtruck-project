@@ -9,25 +9,25 @@ const {users,populateUsers} = require('./seed/seed');
 beforeEach(populateUsers);
 
 
-describe('POST /users', () =>{
+describe('POST /sign_up', () =>{
 	it('should create a user', (done)=>{
 		var email = 'example@example.com';
 		var password = '123mb!';
+		var firstName = 'Hamdi';
+		var lastName = 'Hmimy';
+		var fullName = 'Hamdi Hmimy';
 
 		request(app)
-			.post('/users')
-			.send({email,password})
-			.expect(200)
+			.post('/sign_up')
+			.send({email,password,firstName,lastName,fullName})
 			.expect((res)=>{
 				expect(res.headers['x-auth']).toExist();
-				expect(res.body._id).toExist();
-				expect(res.body.email).toBe(email);
 			})
 			.end((err)=>{
 				if(err){
 					return done(err);
 				}
-				User.findOne({email}).then((user)=>{
+				User.find({email}).then((user)=>{
 					expect(user).toExist();
 					expect(user.password).toNotBe(password);
 					done();
@@ -37,14 +37,16 @@ describe('POST /users', () =>{
 	})
 
 	it('should return validation error if request invalid', (done)=>{
-			var email = 'example@example.com';
-			var password = '123mb!';
-			
+			// var email = 'example@example.com';
+			// var password = '123mb!';
+			var email = "hamdi123@gmail.com";
 			request(app)
-			.post('/users')
+			.post('/sign_up')
 			.send({
 				email: 'hamdi123@gmail.com',
-				password: '12345'
+				password: '12345',
+				firstName :'',
+				lastName: ''
 			})				
 			.expect(400)
 			.end((err)=>{
@@ -61,7 +63,7 @@ describe('POST /users', () =>{
 	it('should not create user if email is in user', (done)=>{
 		
 			request(app)
-			.post('/users')
+			.post('/sign_up')
 			.send({
 				email: 'hamdi@example.com',
 				password: '123456'
