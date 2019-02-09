@@ -67,7 +67,9 @@ app.post('/users/login', (req,res) =>{ //login for a user
 
 		User.findByCredentials(body.email,body.password).then((user)=>{
 			return user.generateAuthToken().then((token)=>{ //any errors will go to the catch(e)
-			res.header('x-auth',token).send(user); //x- means it is custom
+			res.header('x-auth',token); //x- means it is custom
+			return res.sendFile('/views/success.html', {root:__dirname});   
+
 			});
 			res.send(user);
 		}).catch((e)=>{			//catch(e) will catch promises that are rejected
@@ -185,10 +187,10 @@ app.get('/', (req,res) => {
 	res.sendFile('views/signup.html', {root:__dirname});
 });
 
-app.get('/about', (req,res) =>{
-	res.render('about.hbs', {
-		pageTitle: 'About Page',
-	}); //render the page
+app.get('/login', (req,res) =>{
+		
+	 res.sendFile('/views/signin.html', {root:__dirname});   
+
 });
 
 app.get('/bad', (req,res)=>{
