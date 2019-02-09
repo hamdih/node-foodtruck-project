@@ -29,7 +29,7 @@ app.use(express.static(__dirname + '/views'));
  app.get('/users/me', authenticate, (req,res)=>{
 		res.send(req.user);
 });
-app.post('/sign_up',(req,res) =>{	//creating a new user
+app.post('/users/sign_up',(req,res) =>{	//creating a new user
 	var body = _.pick(req.body,['email', 'password','firstName', 'lastName']);
 	var data = {
 		email: body.email,
@@ -73,7 +73,16 @@ app.post('/users/login', (req,res) =>{ //login for a user
 		}).catch((e)=>{			//catch(e) will catch promises that are rejected
 			res.status(400).send();
 		})
-	})	
+	});
+
+
+app.delete('/users/me/logout',authenticate,(req,res) =>{
+		req.user.removeToken(req.token).then(()=>{
+		res.status(200).send();
+		}, ()=>{
+		res.status(400).send();
+		})	
+})	
 //Create a food truck
 app.post('/foodTrucks',(req,res) => {
  	var newfoodTruck = new foodTruck({
